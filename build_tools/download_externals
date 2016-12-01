@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+#Solaris (and some others) don't have sed -r.  perl -p is equivalent
+if [ `echo "xxx" | sed -r 's/x/y/g' 2>/dev/null | ${GREP} -c "yyy"` != 0 ]; then
+    EXTREGEX="sed -r -e"
+else
+    EXTREGEX="perl -pe"
+fi
+
 if [[ ( ${BASH_VERSINFO[0]} == 4 && ${BASH_VERSINFO[1]} > 1 ) || ${BASH_VERSINFO[0]} > 4 ]] ; then
 	shopt -s compat41
 fi
@@ -26,7 +33,7 @@ if [[ -z "${tmpdir}" ]] ; then
 fi
 trap "rm -rf ${tmpdir}" EXIT
 
-sed -r -e "s/^([^ =]+)\s*=\s*(.*)$/\1=\"\2\"/g" ${ASTTOPDIR}/makeopts >${tmpdir}/makeopts
+${EXTREGEX} "s/^([^ =]+)\s*=\s*(.*)$/\1=\"\2\"/g" ${ASTTOPDIR}/makeopts >${tmpdir}/makeopts
 source ${tmpdir}/makeopts
 if [[ -z "${ASTMODDIR}" ]] ; then
 	echo "${module_name}: Unable to parse ${ASTTOPDIR}/makeopts."

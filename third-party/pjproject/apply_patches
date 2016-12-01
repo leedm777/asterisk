@@ -10,8 +10,8 @@ PATCH=${PATCH:-patch}
 patchdir=${1:?You must supply a patches directory}
 sourcedir=${2?:You must supply a source directory}
 
-patchdir=`readlink -f $patchdir`
-sourcedir=`readlink -f $sourcedir`
+patchdir=`cd $patchdir && pwd`
+sourcedir=`cd $sourcedir && pwd`
 
 if [ ! -d "$patchdir" ] ; then
 	echo "$patchdir is not a directory" >&2
@@ -34,4 +34,3 @@ for patchfile in "$patchdir"/*.patch ; do
 done
 
 exit 0
-
