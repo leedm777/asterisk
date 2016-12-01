@@ -768,12 +768,6 @@ static int swapmode(int *used, int *total)
 	ast_free(swdev);
 	return 1;
 }
-#elif defined(HAVE_SYSCTL) && !defined(HAVE_SYSINFO)
-static int swapmode(int *used, int *total)
-{
-	*used = *total = 0;
-	return 1;
-}
 #endif
 
 #if defined(HAVE_SYSINFO) || defined(HAVE_SYSCTL)
@@ -781,11 +775,11 @@ static int swapmode(int *used, int *total)
 static char *handle_show_sysinfo(struct ast_cli_entry *e, int cmd, struct ast_cli_args *a)
 {
 	uint64_t physmem, freeram;
-	uint64_t freeswap = 0;
 	int nprocs = 0;
 	long uptime = 0;
-	int totalswap = 0;
 #if defined(HAVE_SYSINFO)
+	int totalswap = 0;
+	uint64_t freeswap = 0;
 	struct sysinfo sys_info;
 	sysinfo(&sys_info);
 	uptime = sys_info.uptime / 3600;
@@ -795,11 +789,16 @@ static char *handle_show_sysinfo(struct ast_cli_entry *e, int cmd, struct ast_cl
 	freeswap = (sys_info.freeswap * sys_info.mem_unit) / 1024;
 	nprocs = sys_info.procs;
 #elif defined(HAVE_SYSCTL)
+#if defined(HAVE_SWAPCTL)
+	int totalswap = 0;
+	uint64_t freeswap = 0;
+	int usedswap = 0;
+#endif /* defined(HAVE_SWAPCTL) */
 	static int pageshift;
 	struct vmtotal vmtotal;
 	struct timeval	boottime;
 	time_t	now;
-	int mib[2], pagesize, usedswap = 0;
+	int mib[2], pagesize;
 	size_t len;
 	/* calculate the uptime by looking at boottime */
 	time(&now);
@@ -836,9 +835,11 @@ static char *handle_show_sysinfo(struct ast_cli_entry *e, int cmd, struct ast_cl
 	len = sizeof(vmtotal);
 	sysctl(mib, 2, &vmtotal, &len, NULL, 0);
 	freeram = (vmtotal.t_free << pageshift);
+#if defined(HAVE_SWAPCTL)
 	/* generate swap usage and totals */
 	swapmode(&usedswap, &totalswap);
 	freeswap = (totalswap - usedswap);
+#endif /* defined(HAVE_SWAPCTL) */
 	/* grab number of processes */
 #if defined(__OpenBSD__)
 	mib[0] = CTL_KERN;
