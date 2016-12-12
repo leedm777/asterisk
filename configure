@@ -776,10 +776,6 @@ PBX_RT
 RT_DIR
 RT_INCLUDE
 RT_LIB
-PBX_OPENSSL
-OPENSSL_DIR
-OPENSSL_INCLUDE
-OPENSSL_LIB
 PBX_SRTP_SHUTDOWN
 SRTP_SHUTDOWN_DIR
 SRTP_SHUTDOWN_INCLUDE
@@ -1201,6 +1197,10 @@ PJPROJECT_LIB
 PBX_PJPROJECT
 PJPROJECT_DIR
 PJPROJECT_BUNDLED
+PBX_OPENSSL
+OPENSSL_DIR
+OPENSSL_INCLUDE
+OPENSSL_LIB
 AST_C_COMPILER_FAMILY
 AST_CLANG_BLOCKS
 AST_CLANG_BLOCKS_LIBS
@@ -1365,6 +1365,7 @@ with_sounds_cache
 with_externals_cache
 enable_coverage
 with_pjproject_bundled
+with_ssl
 with_asound
 with_bfd
 with_execinfo
@@ -1430,7 +1431,6 @@ with_speexdsp
 with_sqlite
 with_sqlite3
 with_srtp
-with_ssl
 with_suppserv
 with_tds
 with_termcap
@@ -2110,6 +2110,7 @@ Optional Packages:
                           use cached external module tarfiles in PATH
   --with-pjproject-bundled
                           Use bundled pjproject libraries
+  --with-ssl=PATH         use OpenSSL Secure Sockets Layer files in PATH
   --with-asound=PATH      use Advanced Linux Sound Architecture files in PATH
   --with-bfd=PATH         use Debug symbol decoding files in PATH
   --with-execinfo=PATH    use Stack Backtrace files in PATH
@@ -2180,7 +2181,6 @@ Optional Packages:
   --with-sqlite=PATH      use SQLite files in PATH
   --with-sqlite3=PATH     use SQLite files in PATH
   --with-srtp=PATH        use Secure RTP files in PATH
-  --with-ssl=PATH         use OpenSSL Secure Sockets Layer files in PATH
   --with-suppserv=PATH    use mISDN Supplemental Services files in PATH
   --with-tds=PATH         use FreeTDS files in PATH
   --with-termcap=PATH     use Termcap files in PATH
@@ -9240,6 +9240,40 @@ fi
 
 
 
+    OPENSSL_DESCRIP="OpenSSL Secure Sockets Layer"
+    OPENSSL_OPTION="ssl"
+    PBX_OPENSSL=0
+
+# Check whether --with-ssl was given.
+if test "${with_ssl+set}" = set; then :
+  withval=$with_ssl;
+	case ${withval} in
+	n|no)
+	USE_OPENSSL=no
+	# -1 is a magic value used by menuselect to know that the package
+	# was disabled, other than 'not found'
+	PBX_OPENSSL=-1
+	;;
+	y|ye|yes)
+	ac_mandatory_list="${ac_mandatory_list} OPENSSL"
+	;;
+	*)
+	OPENSSL_DIR="${withval}"
+	ac_mandatory_list="${ac_mandatory_list} OPENSSL"
+	;;
+	esac
+
+fi
+
+
+
+
+
+
+
+
+
+
 	if test "$PJPROJECT_BUNDLED" = "yes" ; then
 
 	if test "${ac_mandatory_list#*PJPROJECT*}" != "$ac_mandatory_list" ; then
@@ -9280,7 +9314,7 @@ $as_echo "configuring" >&6; }
 	fi
 
 	export TAR PATCH SED NM EXTERNALS_CACHE_DIR DOWNLOAD_TO_STDOUT DOWNLOAD_TIMEOUT DOWNLOAD MD5 CAT
-	${GNU_MAKE} --quiet --no-print-directory -C ${PJPROJECT_DIR} EXTERNALS_CACHE_DIR=${EXTERNALS_CACHE_DIR} configure
+	${GNU_MAKE} --quiet --no-print-directory -C ${PJPROJECT_DIR} EXTERNALS_CACHE_DIR=${EXTERNALS_CACHE_DIR} OPENSSL_DIR=${OPENSSL_DIR} configure
 	if test $? -ne 0 ; then
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: failed" >&5
 $as_echo "failed" >&6; }
@@ -12307,38 +12341,6 @@ SRTP_SHUTDOWN_OPTION=srtp
 SRTP_SHUTDOWN_DIR=${SRTP_DIR}
 
 PBX_SRTP_SHUTDOWN=0
-
-
-
-
-
-
-
-    OPENSSL_DESCRIP="OpenSSL Secure Sockets Layer"
-    OPENSSL_OPTION="ssl"
-    PBX_OPENSSL=0
-
-# Check whether --with-ssl was given.
-if test "${with_ssl+set}" = set; then :
-  withval=$with_ssl;
-	case ${withval} in
-	n|no)
-	USE_OPENSSL=no
-	# -1 is a magic value used by menuselect to know that the package
-	# was disabled, other than 'not found'
-	PBX_OPENSSL=-1
-	;;
-	y|ye|yes)
-	ac_mandatory_list="${ac_mandatory_list} OPENSSL"
-	;;
-	*)
-	OPENSSL_DIR="${withval}"
-	ac_mandatory_list="${ac_mandatory_list} OPENSSL"
-	;;
-	esac
-
-fi
-
 
 
 

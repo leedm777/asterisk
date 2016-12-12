@@ -35,3 +35,7 @@ endif
 ifeq ($(shell uname -s),Linux)
     PJPROJECT_CONFIG_OPTS +=  --enable-epoll
 endif
+
+ifneq ($(OPENSSL_DIR),)
+    PJPROJECT_CONFIG_OPTS += --with-ssl=$(OPENSSL_DIR)
+endif

@@ -435,6 +435,10 @@ AC_ARG_WITH([pjproject-bundled],
 	      *) PJPROJECT_BUNDLED=yes ;;
 	esac])
 
+
+dnl Third party libs might need SSL config
+AST_EXT_LIB_SETUP([OPENSSL], [OpenSSL Secure Sockets Layer], [ssl])
+
 THIRD_PARTY_CONFIGURE()
 
 # AST_EXT_LIB_SETUP is used to tell configure to handle variables for
@@ -564,7 +568,6 @@ AST_EXT_LIB_SETUP_OPTIONAL([SRTP_256], [SRTP Library AES-256 (ICM)], [SRTP], [sr
 AST_EXT_LIB_SETUP_OPTIONAL([SRTP_192], [SRTP Library AES-192 (ICM)], [SRTP], [srtp])
 AST_EXT_LIB_SETUP_OPTIONAL([SRTP_GCM], [SRTP Library AES-128 (GCM) and AES-256 (GCM)], [SRTP], [srtp])
 AST_EXT_LIB_SETUP_OPTIONAL([SRTP_SHUTDOWN], [SRTP Library Shutdown Function], [SRTP], [srtp])
-AST_EXT_LIB_SETUP([OPENSSL], [OpenSSL Secure Sockets Layer], [ssl])
 AST_EXT_LIB_SETUP_OPTIONAL([RT], [Realtime functions], [rt])
 AST_EXT_LIB_SETUP([SUPPSERV], [mISDN Supplemental Services], [suppserv])
 AST_EXT_LIB_SETUP([FREETDS], [FreeTDS], [tds])

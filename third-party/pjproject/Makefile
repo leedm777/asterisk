@@ -89,7 +89,7 @@ _all: $(TARGETS)
 
 define verify_tarball
 	($(SHELL_ECHO_PREFIX) Verifying $(TARBALL) &&\
-	tarball_sum=$$($(CAT) $(TARBALL) | $(MD5) | $(SED) -n -r -e "s/^([^ ]+)\s+.*/\1/gp") ;\
+	tarball_sum=$$($(CAT) $(TARBALL) | $(MD5) | cut -c1-32) ;\
 	required_sum=$$($(SED) -n -r -e "s/^([^ ]+)\s+$(TARBALL_FILE)/\1/gp" $(PJMD5SUM)) ;\
 	if [ "$$tarball_sum" != "$$required_sum" ] ; then $(SHELL_ECHO_PREFIX) Verify failed ; exit 1 ;\
 	else $(SHELL_ECHO_PREFIX) Verify successful ; exit 0 ; fi; )
