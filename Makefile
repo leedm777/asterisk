@@ -259,10 +259,9 @@ SUBDIRS_UNINSTALL:=$(SUBDIRS:%=%-uninstall)
 MOD_SUBDIRS_MENUSELECT_TREE:=$(MOD_SUBDIRS:%=%-menuselect-tree)
 
 ifneq ($(findstring darwin,$(OSARCH)),)
-  _ASTCFLAGS+=-D__Darwin__ -mmacosx-version-min=10.6
-  _SOLINK=-mmacosx-version-min=10.6 -Wl,-undefined,dynamic_lookup
-  _SOLINK+=/usr/lib/bundle1.o
-  SOLINK=-bundle $(_SOLINK)
+  _ASTCFLAGS+=-D__Darwin__
+  _SOLINK=-Wl,-undefined,dynamic_lookup
+  SOLINK=$(_SOLINK)
   DYLINK=-Wl,-dylib $(_SOLINK)
   _ASTLDFLAGS+=-L/usr/local/lib
 else
@@ -1096,4 +1095,3 @@ check-alembic: makeopts
 .PHONY: $(SUBDIRS)
 
 FORCE:
-
