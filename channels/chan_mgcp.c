@@ -311,7 +311,7 @@ struct mgcp_subchannel {
 	char txident[80]; /*! \todo FIXME txident is replaced by rqnt_ident in endpoint.
 			This should be obsoleted */
 	char cxident[80];
-	char callid[80];
+	char callid[100];
 	int cxmode;
 	struct mgcp_request *cx_queue; /*!< pending CX commands */
 	ast_mutex_t cx_queue_lock;     /*!< CX queue lock */

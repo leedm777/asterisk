@@ -2638,7 +2638,7 @@ to_string (struct val *vp)
 	if (vp->type == AST_EXPR_string || vp->type == AST_EXPR_numeric_string)
 		return;
 
-	tmp = malloc ((size_t)25);
+	tmp = malloc ((size_t)27);
 	if (tmp == NULL) {
 		ast_log(LOG_WARNING,"malloc() failed\n");
 		return;

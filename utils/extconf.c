@@ -5266,7 +5266,7 @@ static int ast_findlabel_extension2(struct ast_channel *c, struct ast_context *c
 
 static int ast_findlabel_extension2(struct ast_channel *c, struct ast_context *con, const char *exten, const char *label, const char *callerid)
 {
-	return pbx_extension_helper(c, con, NULL, exten, 0, label, callerid, E_FINDLABEL);
+	return pbx_extension_helper(c, con, "", exten, 0, label, callerid, E_FINDLABEL);
 }
 
 static struct ast_context *ast_context_find_or_create(struct ast_context **extcontexts, void *tab, const char *name, const char *registrar)

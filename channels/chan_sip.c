@@ -2082,7 +2082,7 @@ static int sip_cc_monitor_request_cc(struct ast_cc_monitor *monitor, int *availa
 static int construct_pidf_body(enum sip_cc_publish_state state, char *pidf_body, size_t size, const char *presentity)
 {
 	struct ast_str *body = ast_str_alloca(size);
-	char tuple_id[32];
+	char tuple_id[33];
 
 	generate_random_string(tuple_id, sizeof(tuple_id));
 
@@ -8715,12 +8715,12 @@ static struct ast_frame *sip_read(struct ast_channel *ast)
 /*! \brief Generate 32 byte random string for callid's etc */
 static char *generate_random_string(char *buf, size_t size)
 {
-	long val[4];
+	unsigned int val[4];
 	int x;
 
 	for (x=0; x<4; x++)
-		val[x] = ast_random();
-	snprintf(buf, size, "%08lx%08lx%08lx%08lx", (unsigned long)val[0], (unsigned long)val[1], (unsigned long)val[2], (unsigned long)val[3]);
+		val[x] = (unsigned int) ast_random();
+	snprintf(buf, size, "%08x%08x%08x%08x", val[0], val[1], val[2], val[3]);
 
 	return buf;
 }
@@ -15333,7 +15333,7 @@ static int transmit_cc_notify(struct ast_cc_agent *agent, struct sip_pvt *subscr
 {
 	struct sip_request req;
 	struct sip_cc_agent_pvt *agent_pvt = agent->private_data;
-	char uri[SIPBUFSIZE];
+	char uri[SIPBUFSIZE + 10];
 	char state_str[64];
 	char subscription_state_hdr[64];
 
@@ -15350,7 +15350,7 @@ static int transmit_cc_notify(struct ast_cc_agent *agent, struct sip_pvt *subscr
 	add_header(&req, "Subscription-State", subscription_state_hdr);
 	if (state == CC_READY) {
 		generate_uri(subscription, agent_pvt->notify_uri, sizeof(agent_pvt->notify_uri));
-		snprintf(uri, sizeof(uri) - 1, "cc-URI: %s\r\n", agent_pvt->notify_uri);
+		snprintf(uri, sizeof(uri), "cc-URI: %s\r\n", agent_pvt->notify_uri);
 	}
 	add_content(&req, state_str);
 	if (state == CC_READY) {

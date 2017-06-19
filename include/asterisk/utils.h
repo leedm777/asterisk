@@ -75,7 +75,7 @@ extern unsigned int __unsigned_int_flags_dummy;
 					} while(0)
 
 #define ast_clear_flag(p,flag) 		do { \
-					typeof ((p)->flags) __p = (p)->flags; \
+					typeof ((p)->flags) __p = 0; \
 					typeof (__unsigned_int_flags_dummy) __x = 0; \
 					(void) (&__p == &__x); \
 					((p)->flags &= ~(flag)); \

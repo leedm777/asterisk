@@ -288,7 +288,7 @@ static void rebuild_channels(newtComponent c)
 {
 	void *prev = NULL;
 	struct ast_chan *chan;
-	char tmpn[42];
+	char tmpn[128];
 	char tmp[256];
 	int x=0;
 	prev = newtListboxGetCurrent(c);
@@ -325,7 +325,7 @@ static int get_input(struct ast_mansession *s, char *output)
 	int res;
 	int x;
 	struct timeval tv = {0, 0};
-	fd_set fds;
+	ast_fdset fds;
 	for (x=1;x<s->inlen;x++) {
 		if ((s->inbuf[x] == '\n') && (s->inbuf[x-1] == '\r')) {
 			/* Copy output data up to and including \r\n */
@@ -344,7 +344,7 @@ static int get_input(struct ast_mansession *s, char *output)
 	}
 	FD_ZERO(&fds);
 	FD_SET(s->fd, &fds);
-	res = select(s->fd + 1, &fds, NULL, NULL, &tv);
+	res = ast_select(s->fd + 1, &fds, NULL, NULL, &tv);
 	if (res < 0) {
 		fprintf(stderr, "Select returned error: %s\n", strerror(errno));
 	} else if (res > 0) {

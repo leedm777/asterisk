@@ -215,7 +215,7 @@ static void rxqcheck (char *dir, char *queue, char *process)
       if ((*fn->d_name != '.'
            && ((!ql && (p = strchr (fn->d_name, '.'))) || (ql && !strncmp (fn->d_name, queue, ql) && fn->d_name[ql] == '.'))))
       {                         /* process file */
-         char filename[1010];
+         char filename[1033];
          char line[1000];
          unsigned short ud[160];
          unsigned char udl = 0;

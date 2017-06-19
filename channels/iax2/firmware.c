@@ -208,7 +208,7 @@ void iax_firmware_reload(void)
 	struct iax_firmware *cur = NULL;
 	DIR *fwd;
 	struct dirent *de;
-	char dir[256], fn[256];
+	char dir[256], fn[sizeof(de->d_name) + sizeof(dir) + 2];
 
 	AST_LIST_LOCK(&firmwares);
 
