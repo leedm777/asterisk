@@ -1415,10 +1415,10 @@ int ast_translator_best_choice(struct ast_format_cap *dst_cap,
 				beststeps = matrix_get(x, y)->multistep;
 			} else if (matrix_get(x, y)->table_cost == besttablecost
 					&& matrix_get(x, y)->multistep == beststeps) {
-				int gap_selected = abs(ast_format_get_sample_rate(best)
-					- ast_format_get_sample_rate(bestdst));
-				int gap_current = abs(ast_format_get_sample_rate(src)
-					- ast_format_get_sample_rate(dst));
+				int gap_selected = abs((int)(ast_format_get_sample_rate(best)
+					- ast_format_get_sample_rate(bestdst)));
+				int gap_current = abs((int)(ast_format_get_sample_rate(src)
+					- ast_format_get_sample_rate(dst)));
 
 				if (gap_current < gap_selected) {
 					/* better than what we have so far */
