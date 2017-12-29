@@ -291,7 +291,7 @@ int AST_OPTIONAL_API_NAME(ast_websocket_server_remove_protocol)(struct ast_webso
 /*! \brief Close function for websocket session */
 int AST_OPTIONAL_API_NAME(ast_websocket_close)(struct ast_websocket *session, uint16_t reason)
 {
-	char frame[4] = { 0, }; /* The header is 2 bytes and the reason code takes up another 2 bytes */
+	unsigned char frame[4] = { 0, }; /* The header is 2 bytes and the reason code takes up another 2 bytes */
 	int res;
 
 	if (session->close_sent) {
