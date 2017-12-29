@@ -124,7 +124,10 @@ int __attribute__((format(printf, 2, 0))) vasprintf(char **strp, const char *fmt
 void timersub(struct timeval *tvend, struct timeval *tvstart, struct timeval *tvdiff);
 #endif
 
+#undef	strlcat
 #define	strlcat	__use__ast_str__functions_not__strlcat__
+
+#undef	strlcpy
 #define	strlcpy	__use__ast_copy_string__not__strlcpy__
 
 #include <errno.h>
