@@ -1290,14 +1290,15 @@ static int require_pgsql(const char *database, const char *tablename, va_list ap
 				struct ast_str *sql = ast_str_create(100);
 				char fieldtype[15];
 				PGresult *result;
+				int length;
 
 				if (requirements == RQ_CREATECHAR || type == RQ_CHAR) {
 					/* Size is minimum length; make it at least 50% greater,
 					 * just to be sure, because PostgreSQL doesn't support
 					 * resizing columns. */
-					snprintf(fieldtype, sizeof(fieldtype), "CHAR(%hhu)",
-						size < 15 ? size * 2 :
-						(size * 3 / 2 > 255) ? 255 : size * 3 / 2);
+					length = size < 15 ? size * 2 :
+						(size * 3 / 2 > 255) ? 255 : size * 3 / 2;
+					snprintf(fieldtype, sizeof(fieldtype), "CHAR(%d)", length);
 				} else if (type == RQ_INTEGER1 || type == RQ_UINTEGER1 || type == RQ_INTEGER2) {
 					snprintf(fieldtype, sizeof(fieldtype), "INT2");
 				} else if (type == RQ_UINTEGER2 || type == RQ_INTEGER3 || type == RQ_UINTEGER3 || type == RQ_INTEGER4) {

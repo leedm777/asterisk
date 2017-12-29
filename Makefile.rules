@@ -91,7 +91,7 @@ CXX_CFLAGS=$(PTHREAD_CFLAGS) $(filter-out -Wstrict-prototypes -Wmissing-prototyp
 
 # Clang -Werror warning suppressions
 ifeq ($(C_COMPILER_FAMILY),clang)
-	CC_CFLAGS+=-Wno-unused-value -Wno-parentheses-equality
+	CC_CFLAGS+=-Wno-unused-value -Wno-parentheses-equality -Wno-self-assign
 endif
 
 ifeq ($(GNU_LD),1)

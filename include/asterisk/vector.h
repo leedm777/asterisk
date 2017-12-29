@@ -306,6 +306,8 @@ AST_VECTOR(ast_vector_string, char *);
  * of the vector itself.
  */
 #define AST_VECTOR_INSERT_AT(vec, idx, elem) ({ \
+	_Pragma("clang diagnostic push"); \
+	_Pragma("clang diagnostic ignored \"-Wtautological-compare\""); \
 	int res = 0; \
 	size_t __move; \
 	do { \
@@ -320,6 +322,7 @@ AST_VECTOR(ast_vector_string, char *);
 		(vec)->elems[(idx)] = (elem); \
 		(vec)->current = ((idx) > (vec)->current ? (idx) : (vec)->current) + 1; \
 	} while (0); \
+	_Pragma("clang diagnostic pop"); \
 	res; \
 })
 
